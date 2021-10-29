@@ -23,8 +23,15 @@ class _IslandCounterState extends State<IslandCounter> {
 
   int? generatedMatrixLength; //Length of generated matrix
   List<List<int>> generatedMatrix = [];
-  List<List<List<int>?>> oneMatrix = [];
-  int islandsCounter = 0;
+  List<List<int>> generatedAuxMatrix = [];
+  List<List<List<int>?>> positionsMatrix = [];
+
+  int islandsCounter1 = 0;
+  int islandsCounter2 = 0;
+  DateTime? initialTimeFirstWay;
+  String firstWayTime = "";
+  DateTime? initialTimeSecondWay;
+  String secondWayTime = "";
 
   Function eq = const ListEquality().equals;
 
@@ -35,7 +42,6 @@ class _IslandCounterState extends State<IslandCounter> {
       screenWidth = MediaQuery.of(context).size.width;
       screenHeight = MediaQuery.of(context).size.height -
           MediaQuery.of(context).viewPadding.top;
-      generateMatrix();
     }
     super.didChangeDependencies();
   }
@@ -84,6 +90,13 @@ class _IslandCounterState extends State<IslandCounter> {
                       child: TextField(
                         onSubmitted: (val) {
                           generateMatrix();
+                          initialTimeFirstWay = DateTime.now();
+                          getIslandsNumber();
+                          firstWayTime = getFormatTime(initialTimeFirstWay!);
+
+                          initialTimeSecondWay = DateTime.now();
+                          calculatePositionsMatrix();
+                          secondWayTime = getFormatTime(initialTimeSecondWay!);
                         },
                         controller: _matrixLengthController,
                         focusNode: _matrixLengthFocus,
@@ -102,6 +115,13 @@ class _IslandCounterState extends State<IslandCounter> {
                       onTap: () {
                         _matrixLengthFocus.unfocus();
                         generateMatrix();
+                        initialTimeFirstWay = DateTime.now();
+                        getIslandsNumber();
+                        firstWayTime = getFormatTime(initialTimeFirstWay!);
+
+                        initialTimeSecondWay = DateTime.now();
+                        calculatePositionsMatrix();
+                        secondWayTime = getFormatTime(initialTimeSecondWay!);
                       },
                       child: Container(
                           padding: EdgeInsets.symmetric(
@@ -168,36 +188,121 @@ class _IslandCounterState extends State<IslandCounter> {
             (generatedMatrix.isNotEmpty)
                 ? Container(
                     margin: EdgeInsets.only(top: screenHeight * 0.03),
-                    alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text(
-                          "Islands count:",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: screenWidth * 0.045),
+                        // Recursive way
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin:
+                                  EdgeInsets.only(bottom: screenHeight * 0.02),
+                              child: Text(
+                                "Recursive Way:",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                    fontSize: screenWidth * 0.045),
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Inslands: ",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: screenWidth * 0.035),
+                                ),
+                                Text(
+                                  islandsCounter2.toString(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: screenWidth * 0.05),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Duration: ",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: screenWidth * 0.035),
+                                ),
+                                Text(
+                                  firstWayTime.toString() + " ms",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: screenWidth * 0.04),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                        Text(
-                          islandsCounter.toString(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontSize: screenWidth * 0.05),
+                        // Normal way
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin:
+                                  EdgeInsets.only(bottom: screenHeight * 0.02),
+                              child: Text(
+                                "Normal Way(O4):",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                    fontSize: screenWidth * 0.045),
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Inslands: ",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: screenWidth * 0.035),
+                                ),
+                                Text(
+                                  islandsCounter2.toString(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: screenWidth * 0.05),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Duration: ",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: screenWidth * 0.035),
+                                ),
+                                Text(
+                                  secondWayTime.toString() + " ms",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: screenWidth * 0.04),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     calculteOneMatrix();
-                        //   },
-                        //   child: Container(
-                        //     width: screenHeight * 0.3,
-                        //     height: screenHeight * 0.1,
-                        //     color: Colors.red,
-                        //     child: Text("generar"),
-                        //   ),
-                        // )
                       ],
                     ))
                 : const SizedBox()
@@ -207,12 +312,12 @@ class _IslandCounterState extends State<IslandCounter> {
     ));
   }
 
-  void generateOneMatrix() {
+  void generatePositionsMatrix() {
     try {
       if (generatedMatrixLength != null) {
-        oneMatrix.clear();
+        positionsMatrix.clear();
         for (int i = 0; i < generatedMatrixLength!; i++) {
-          oneMatrix.add([]);
+          positionsMatrix.add([]);
         }
       }
     } catch (e) {
@@ -226,10 +331,10 @@ class _IslandCounterState extends State<IslandCounter> {
       if (_matrixLengthController.text.isNotEmpty) {
         generatedMatrixLength = int.parse(_matrixLengthController.text);
         generatedMatrix.clear();
-        oneMatrix.clear();
+        positionsMatrix.clear();
         for (int i = 0; i < generatedMatrixLength!; i++) {
           generatedMatrix.add([]);
-          oneMatrix.add([]);
+          positionsMatrix.add([]);
           for (int j = 0; j < generatedMatrixLength!; j++) {
             int rand = Random().nextInt(2);
             generatedMatrix[i].add(rand);
@@ -237,7 +342,6 @@ class _IslandCounterState extends State<IslandCounter> {
         }
         setState(() {});
         print(generatedMatrix);
-        calculteOneMatrix();
       }
     } catch (e) {
       print("ERROR generateMatrix: $e");
@@ -245,39 +349,37 @@ class _IslandCounterState extends State<IslandCounter> {
   }
 
   //Generate a matrix of list of positions when pivot is equal to 1
-  void calculteOneMatrix() {
+  void calculatePositionsMatrix() {
     try {
-      generateOneMatrix();
+      generatePositionsMatrix();
       List<int> auxList = [];
-      // List<Map<String, dynamic>> auxList = [];
-      for (int rowIndex = 0; rowIndex < oneMatrix.length; rowIndex++) {
+      for (int rowIndex = 0; rowIndex < positionsMatrix.length; rowIndex++) {
         for (int columnIndex = 0;
-            columnIndex < oneMatrix.length;
+            columnIndex < positionsMatrix.length;
             columnIndex++) {
           if (generatedMatrix[rowIndex][columnIndex] == 1) {
-            // auxList.add({"index": columnIndex, "added": false});
             auxList.add(columnIndex);
-            if (columnIndex == oneMatrix.length - 1) {
-              oneMatrix[rowIndex].add(List.of(auxList));
+            if (columnIndex == positionsMatrix.length - 1) {
+              positionsMatrix[rowIndex].add(List.of(auxList));
               auxList.clear();
             }
           } else {
             if (auxList.isNotEmpty) {
-              oneMatrix[rowIndex].add(List.of(auxList));
+              positionsMatrix[rowIndex].add(List.of(auxList));
               auxList.clear();
             }
           }
         }
       }
-      print(oneMatrix);
-      calculteIslandsNumber();
+      print(positionsMatrix);
+      calculateIslandsNumber();
     } catch (e) {
       print("ERROR calculateIslandsNumber: $e");
     }
   }
 
   // Get the number of islands
-  void calculteIslandsNumber() {
+  void calculateIslandsNumber() {
     try {
       List<Map<String, dynamic>> currentListElements = [];
       List<Map<String, dynamic>> nextListElements = [];
@@ -288,19 +390,19 @@ class _IslandCounterState extends State<IslandCounter> {
       List<int> indexToConcat = [];
       bool concat;
       int counter = 0;
-      islandsCounter = 0;
+      islandsCounter2 = 0;
 
       // Go across row Ones matrix
-      for (int rowIndex = 0; rowIndex < oneMatrix.length; rowIndex++) {
-        if (rowIndex == 0 && oneMatrix[rowIndex].isNotEmpty) {
+      for (int rowIndex = 0; rowIndex < positionsMatrix.length; rowIndex++) {
+        if (rowIndex == 0 && positionsMatrix[rowIndex].isNotEmpty) {
           // Get list of maps from current row
-          for (List<int>? rowMap in oneMatrix[rowIndex]) {
+          for (List<int>? rowMap in positionsMatrix[rowIndex]) {
             currentListElements.add({"list": List.of(rowMap!), "added": false});
           }
         }
-        if (rowIndex != oneMatrix.length - 1) {
+        if (rowIndex != positionsMatrix.length - 1) {
           // Get list of maps from next row
-          for (var rowList in oneMatrix[rowIndex + 1]) {
+          for (var rowList in positionsMatrix[rowIndex + 1]) {
             nextListElements.add({"list": List.of(rowList!), "added": false});
           }
           // Go across current one matrix row element
@@ -326,7 +428,7 @@ class _IslandCounterState extends State<IslandCounter> {
               }
             }
             if (!contains) {
-              islandsCounter++;
+              islandsCounter2++;
             }
             if (auxList["list"].isNotEmpty) {
               auxCurrentListElements.add(Map.of(auxList));
@@ -391,47 +493,17 @@ class _IslandCounterState extends State<IslandCounter> {
           if (counter == 100) {
             print(counter);
           }
-//
-          // List<int> indexToDelete = [];
-          // for (int i = 0; i < auxCurrentListElements.length; i++) {
-          //   for (int j = i + 1;
-          //       j != i && j < auxCurrentListElements.length;
-          //       j++) {
-          //     if (i < auxCurrentListElements.length) {
-          //       List list1 = auxCurrentListElements[i]["list"];
-          //       List list2 = auxCurrentListElements[j]["list"];
-          //       // for(int element in list2){
-          //       //   if(list1.contains(element)){
-
-          //       //   }
-          //       // }
-          //       if (eq(list1, list2)) {
-          //         if (!indexToDelete.contains(j)) {
-          //           indexToDelete.add(j);
-          //         }
-          //       }
-          //     }
-          //   }
-          // }
-
-          // indexToDelete.sort((a, b) => b.compareTo(a));
-          // for (int index in indexToDelete) {
-          //   auxCurrentListElements.removeAt(index);
-          //   // islandsCounter--;
-          // }
-//
           currentListElements = List.of(auxCurrentListElements);
           auxCurrentListElements.clear();
           nextListElements.clear();
         } else {
           // ignore: unused_local_variable
           for (Map<String, dynamic> elementsList in currentListElements) {
-            islandsCounter++;
+            islandsCounter2++;
           }
         }
       }
       setState(() {});
-      print("ISLANDS: " + islandsCounter.toString());
     } catch (e) {
       print("ERROR calculateIslandsNumber: $e");
     }
@@ -473,7 +545,8 @@ class _IslandCounterState extends State<IslandCounter> {
         // If field change to 0
         if (islandsTogeter == 0) {
           setState(() {
-            islandsCounter--;
+            islandsCounter1--;
+            islandsCounter2--;
             generatedMatrix[rowIndex][colIndex] = 0;
           });
         } else if (islandsTogeter == 1) {
@@ -484,13 +557,20 @@ class _IslandCounterState extends State<IslandCounter> {
           setState(() {
             generatedMatrix[rowIndex][colIndex] = 0;
           });
-          calculteOneMatrix();
+          initialTimeFirstWay = DateTime.now();
+          getIslandsNumber();
+          firstWayTime = getFormatTime(initialTimeFirstWay!);
+
+          initialTimeSecondWay = DateTime.now();
+          calculatePositionsMatrix();
+          secondWayTime = getFormatTime(initialTimeSecondWay!);
         }
       } else {
         // If field change to 1
         if (islandsTogeter == 0) {
           setState(() {
-            islandsCounter++;
+            islandsCounter1++;
+            islandsCounter2++;
             generatedMatrix[rowIndex][colIndex] = 1;
           });
         } else if (islandsTogeter == 1) {
@@ -501,11 +581,75 @@ class _IslandCounterState extends State<IslandCounter> {
           setState(() {
             generatedMatrix[rowIndex][colIndex] = 1;
           });
-          calculteOneMatrix();
+          initialTimeFirstWay = DateTime.now();
+          getIslandsNumber();
+          firstWayTime = getFormatTime(initialTimeFirstWay!);
+
+          initialTimeSecondWay = DateTime.now();
+          calculatePositionsMatrix();
+          secondWayTime = getFormatTime(initialTimeSecondWay!);
         }
       }
     } catch (e) {
       print("ERROR changeFieldValue: $e");
+    }
+  }
+
+  //--------- Recursive Way ---------
+
+  // Generate an auxiliar matrix from the generated matrix
+  void generateAuxMatrix() {
+    generatedAuxMatrix.clear();
+    for (int i = 0; i < generatedMatrixLength!; i++) {
+      generatedAuxMatrix.add([]);
+      for (int j = 0; j < generatedMatrixLength!; j++) {
+        generatedAuxMatrix[i].add(generatedMatrix[i][j]);
+      }
+    }
+    print(generatedAuxMatrix);
+  }
+
+  // Verify values around the current
+  void verifyNext(int i, int j) {
+    if (i < 0 ||
+        i >= generatedAuxMatrix.length ||
+        j < 0 ||
+        j >= generatedAuxMatrix.length ||
+        generatedAuxMatrix[i][j] != 1) {
+      return;
+    }
+    generatedAuxMatrix[i][j] = 0;
+    verifyNext(i + 1, j);
+    verifyNext(i - 1, j);
+    verifyNext(i, j + 1);
+    verifyNext(
+      i,
+      j - 1,
+    );
+  }
+
+  // Calculate numbers of islands with a recursive function
+  void getIslandsNumber() {
+    generateAuxMatrix();
+    islandsCounter1 = 0;
+    for (int i = 0; i < generatedAuxMatrix.length; i++) {
+      for (int j = 0; j < generatedAuxMatrix.length; j++) {
+        if (generatedAuxMatrix[i][j] == 1) {
+          islandsCounter1++;
+          verifyNext(i, j);
+        }
+      }
+    }
+    print(generatedMatrix);
+  }
+
+  String getFormatTime(DateTime initialTime) {
+    try {
+      int time = DateTime.now().difference(initialTime).inMilliseconds;
+      return time.toString();
+    } catch (e) {
+      print("ERROR getFormatTime: $e");
+      return "";
     }
   }
 }

@@ -28,9 +28,6 @@ class _IslandCounterState extends State<IslandCounter> {
 
   Function eq = const ListEquality().equals;
 
-  ScrollController firstRowScrollController = ScrollController();
-  ScrollController rowsScrollController = ScrollController();
-
   @override
   void didChangeDependencies() {
     if (!dataLoaded) {
@@ -65,7 +62,7 @@ class _IslandCounterState extends State<IslandCounter> {
             Text(
               "Islands counter",
               style: TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: screenWidth * 0.045),
+                  fontWeight: FontWeight.bold, fontSize: screenWidth * 0.05),
             ),
             Container(
                 margin: EdgeInsets.only(
@@ -111,7 +108,7 @@ class _IslandCounterState extends State<IslandCounter> {
                               horizontal: screenWidth * 0.03,
                               vertical: screenHeight * 0.012),
                           decoration: BoxDecoration(
-                              color: Colors.grey,
+                              color: Colors.blueGrey,
                               borderRadius: BorderRadius.circular(10)),
                           child: Text("Generate",
                               style: TextStyle(
@@ -123,14 +120,14 @@ class _IslandCounterState extends State<IslandCounter> {
                 )),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              primary: true,
+              // primary: true,
               child: Container(
                 height: screenHeight * 0.6,
                 width: screenWidth * 0.1 * generatedMatrix.length,
                 margin: EdgeInsets.only(top: screenHeight * 0.02),
                 child: ListView.builder(
+                    primary: true,
                     shrinkWrap: true,
-                    primary: false,
                     itemCount: generatedMatrix.length,
                     itemBuilder: (context, rowIndex) {
                       return SizedBox(
@@ -155,9 +152,12 @@ class _IslandCounterState extends State<IslandCounter> {
                                         : Colors.lightBlue[100],
                                   ),
                                   alignment: Alignment.center,
-                                  child: Text(generatedMatrix[rowIndex]
-                                          [columnIndex]
-                                      .toString()),
+                                  child: Text(
+                                    generatedMatrix[rowIndex][columnIndex]
+                                        .toString(),
+                                    style: TextStyle(
+                                        fontSize: screenWidth * 0.035),
+                                  ),
                                 ),
                               );
                             }),

@@ -60,7 +60,7 @@ class _IslandCounterState extends State<IslandCounter> {
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.only(
-          top: screenHeight * 0.1,
+          top: screenHeight * 0.07,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -187,7 +187,8 @@ class _IslandCounterState extends State<IslandCounter> {
             ),
             (generatedMatrix.isNotEmpty)
                 ? Container(
-                    margin: EdgeInsets.only(top: screenHeight * 0.03),
+                    margin: EdgeInsets.only(
+                        top: screenHeight * 0.03, bottom: screenHeight * 0.05),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
